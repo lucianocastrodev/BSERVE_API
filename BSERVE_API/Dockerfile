@@ -1,7 +1,7 @@
 # Consulte https://aka.ms/customizecontainer para saber como personalizar seu contêiner de depuração e como o Visual Studio usa este Dockerfile para criar suas imagens para uma depuração mais rápida.
 
 # Esta fase é usada durante a execução no VS no modo rápido (padrão para configuração de depuração)
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base  # <--- MUDOU AQUI (era 9.0)
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
@@ -9,7 +9,7 @@ EXPOSE 8081
 
 
 # Esta fase é usada para compilar o projeto de serviço
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build    # <--- JÁ ESTAVA CORRETO
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BSERVE_API/BSERVE_API.csproj", "BSERVE_API/"]
