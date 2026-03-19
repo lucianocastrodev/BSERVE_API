@@ -84,4 +84,4 @@ app.MapAuthEndpoints();
 
 app.MapHub<ProdutosHub>("/hub/produtos").RequireCors("AllowBlazor");
 
-app.Run();
+app.Run("http://*:3000");
