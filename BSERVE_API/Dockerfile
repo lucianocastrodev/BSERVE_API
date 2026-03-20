@@ -12,7 +12,7 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BSERVE_API2/BSERVE_API.csproj", "BSERVE_API/"]
+COPY ["BSERVE_API/BSERVE_API.csproj", "BSERVE_API/"]
 RUN dotnet restore "./BSERVE_API/BSERVE_API.csproj"
 COPY . .
 WORKDIR "/src/BSERVE_API"
