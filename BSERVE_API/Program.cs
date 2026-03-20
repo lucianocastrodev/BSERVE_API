@@ -28,6 +28,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             "https://localhost:7153",
+            "https://192.168.1.115:7153",
             "http://localhost:5263",
             "http://192.168.1.115:5263",
             "https://bserve.com.br"
