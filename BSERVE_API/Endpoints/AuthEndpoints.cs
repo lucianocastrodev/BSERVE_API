@@ -1,10 +1,8 @@
-﻿using BSERVE_API.Data;
+using BSERVE_API.Data;
 using BSERVE_API.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Npgsql;
 
 namespace BSERVE_API.Endpoints;
 
@@ -23,6 +21,7 @@ public static class AuthEndpoints
 
             var passwordHasher = new PasswordHasher<string>();
             var result = passwordHasher.VerifyHashedPassword(null!, usuario.SenhaHash, dto.Senha);
+
             if (result == PasswordVerificationResult.Failed)
                 return Results.Unauthorized();
 
@@ -31,7 +30,7 @@ public static class AuthEndpoints
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Name, usuario.Nome),
                 new Claim(ClaimTypes.Email, usuario.Email),
-                new Claim(ClaimTypes.Role, usuario.Role)
+                new Claim(ClaimTypes.Role, usuario.Role ?? "")
             };
 
             var identity = new ClaimsIdentity(claims, "BserveCookieAuth");
@@ -42,44 +41,48 @@ public static class AuthEndpoints
                 principal,
                 new AuthenticationProperties
                 {
-                    IsPersistent = true // mantém sessão mesmo após fechar o navegador
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddDays(7)
                 });
 
-            return Results.Ok(new { sucesso = true, mensagem = "Login realizado com sucesso" });
-        }).RequireCors("AllowBlazor");
+            return Results.Ok(new
+            {
+                sucesso = true,
+                mensagem = "Login realizado com sucesso"
+            });
+        });
 
         // POST /logout
         group.MapPost("/logout", async (HttpContext context) =>
         {
             await context.SignOutAsync("BserveCookieAuth");
-            return Results.Ok(new { sucesso = true, mensagem = "Logout realizado" });
-        }).RequireCors("AllowBlazor");
 
-        // GET /me
+            return Results.Ok(new
+            {
+                sucesso = true,
+                mensagem = "Logout realizado"
+            });
+        });
+
+        // GET /me (protegido)
         group.MapGet("/me", (HttpContext context) =>
         {
-            if (context.User.Identity?.IsAuthenticated ?? false)
+            var usuario = new Usuario
             {
-                var usuario = new Usuario
-                {
-                    Id = Guid.TryParse(
-                            context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-                            out var guid) ? guid : Guid.Empty,
-                    Nome = context.User.Identity.Name ?? "",
-                    Email = context.User.FindFirst(ClaimTypes.Email)?.Value ?? "",
-                    Role = context.User.FindFirst(ClaimTypes.Role)?.Value ?? "",
-                    SenhaHash = "" // nunca envie a senha real!
-                };
+                Id = Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
+                Nome = context.User.Identity!.Name!,
+                Email = context.User.FindFirst(ClaimTypes.Email)!.Value,
+                Role = context.User.FindFirst(ClaimTypes.Role)!.Value,
+                SenhaHash = ""
+            };
 
-                return Results.Ok(new SessionModel
-                {
-                    Logado = true,
-                    Usuario = usuario
-                });
-            }
-
-            return Results.Unauthorized();
-        }).RequireCors("AllowBlazor");
+            return Results.Ok(new SessionModel
+            {
+                Logado = true,
+                Usuario = usuario
+            });
+        })
+        .RequireAuthorization(); // 🔐 agora protegido corretamente
     }
 }
 
