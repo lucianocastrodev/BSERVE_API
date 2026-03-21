@@ -18,7 +18,7 @@ public static class ProdutoEndpoints
         group.MapGet("/", async (ProdutoRepository repo) =>
         {
             var produtos = await repo.GetAll();
-            await Task.Delay(1000);
+            await Task.Delay(300);
             return Results.Ok(produtos);
         });
 
