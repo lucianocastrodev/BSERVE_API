@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../BSERVE_LIBRARY/BSERVE_LIBRARY.csproj" />
   <Project Path="BSERVE_API/BSERVE_API.csproj" />
 </Solution>

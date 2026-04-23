@@ -1,4 +1,4 @@
-﻿using BSERVE_API.Models;
+﻿using BSERVE_LIBRARY.Models;
 using Dapper;
 using Microsoft.AspNetCore.Identity;
 using Npgsql;

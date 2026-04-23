@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Npgsql;
-using BSERVE_API.Models;
+using BSERVE_LIBRARY.Models;
 using System.Data;
 
 namespace BSERVE_API.Data;
@@ -11,7 +11,7 @@ public class ProdutoRepository
 
     public ProdutoRepository(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _connectionString = configuration.GetConnectionString("DefaultConnection")!;
     }
 
     private IDbConnection Connection()

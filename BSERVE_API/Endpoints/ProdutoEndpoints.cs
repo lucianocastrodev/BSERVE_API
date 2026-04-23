@@ -1,6 +1,6 @@
 ﻿using BSERVE_API.Data;
 using BSERVE_API.Hubs;
-using BSERVE_API.Models;
+using BSERVE_LIBRARY.Models;
 using Microsoft.AspNetCore.SignalR;
 using Npgsql;
 

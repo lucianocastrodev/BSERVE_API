@@ -46,8 +46,8 @@ builder.Services
     {
         options.Cookie.Name = "BserveAuth";
         options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // SameAsRequested para http / Aways par https;
+        options.Cookie.SameSite = SameSiteMode.Lax; // Lax para http / None par https;
 
         options.Events.OnRedirectToLogin = context =>
         {

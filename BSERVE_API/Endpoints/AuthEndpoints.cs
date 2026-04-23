@@ -1,5 +1,5 @@
 using BSERVE_API.Data;
-using BSERVE_API.Models;
+using BSERVE_LIBRARY.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -41,7 +41,7 @@ public static class AuthEndpoints
                 principal,
                 new AuthenticationProperties
                 {
-                    IsPersistent = true,
+                    IsPersistent = dto.ContinuarLogado, // Usar a nova propriedade para lembrar senha
                     ExpiresUtc = DateTime.UtcNow.AddDays(7)
                 });
 
@@ -87,7 +87,7 @@ public static class AuthEndpoints
 }
 
 // DTO e modelo
-public record LoginDto(string Email, string Senha);
+public record LoginDto(string Email, string Senha, bool ContinuarLogado = false);
 
 public class SessionModel
 {

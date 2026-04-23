@@ -1,5 +1,5 @@
 ﻿using BSERVE_API.Data;
-using BSERVE_API.Models;
+using BSERVE_LIBRARY.Models;
 using Npgsql;
 
 namespace BSERVE_API.Endpoints;
